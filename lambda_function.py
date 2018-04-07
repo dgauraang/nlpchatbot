@@ -1,11 +1,15 @@
 import csv
+import re
 from typing import List
 
 def lambda_handler(event, context):
     to_number = event['To']
     from_number = event['From']
     body = event['Body']
-
+    
+    body = body.strip('+')
+    body = re.sub('[!@#$.]', '', body)
+    
     if not to_number:
         return "The function needs a 'To' number"
     elif not from_number:
@@ -13,10 +17,11 @@ def lambda_handler(event, context):
     elif not body:
         return "The function needs a 'Body' message to send."
         
-    message = body.split(' ')
+    message = body.split('+')
 
     for row in getData('data.csv'):
         for word in message:
+            word = word.lower()
             if word in row['Keywords']:
                 return rowtomessage(row)
         
