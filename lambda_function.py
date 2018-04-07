@@ -26,10 +26,22 @@ def notblank(value: str):
     return value == ''
 
 def rowtomessage(row: List[str]):
-    message = ''
-    for key, val in row.items():
-        if key != 'Keywords' and val != '':
-            message = message + key + ': ' + val + '\n' 
+    #used to keep track of whether both phone num and office info are available
+    firstClauseComplete = False
+    message = 'The ' + row['Resource']
+    if row['Phone Number'] != '':
+        message = message + ' phone number is ' + row['Phone Number']
+        firstClauseComplete = True
+    if row['Office Hours'] != '' and row['Office Location'] != '':
+        #if the phone number was already present, the office loc is the second part of the sentence.
+        if firstClauseComplete:
+            message = message + ' , and it '
+        message = message + 'is open ' + row['Office Hours'] + ' in the ' + row['Office Location'] + '.'
+    message = message + row['Pertinent Info']
+    if row['Website'] != '':
+        message = message + '\nWebsite: ' + row['Website']
+    if row['Email'] != '':
+        message = message + '\nEmail: ' + row['Email']
     return message
 
 def getData(filename: str):
