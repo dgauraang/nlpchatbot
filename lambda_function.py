@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     for row in getData('data.csv'):
         for word in message:
             if word in row['Keywords']:
-                print(rowtomessage(row))
+                return rowtomessage(row)
         
     return "insufficient info"
 
